@@ -1,12 +1,12 @@
 package com.example.michael.patientapp;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
+
+import com.example.michael.patientapp.Util.PatientJsonReadWrite;
+
+import java.io.InputStream;
 
 public class PatientActivity extends AppCompatActivity {
 
@@ -16,10 +16,22 @@ public class PatientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_patient);
 
         Bundle bundle = getIntent().getExtras();
-        String title = bundle.getString("title");
+        String name = bundle.getString("name");
+        String id = bundle.getString("id");
 
-        TextView userName = (TextView)findViewById(R.id.patient_name);
-        userName.setText(title);
+        TextView nameView = (TextView)findViewById(R.id.patient_name);
+        nameView.setText(name);
+        TextView idView = (TextView)findViewById(R.id.patient_id);
+        idView.setText(id);
+
+        InputStream is = getResources().openRawResource(R.raw.patients);
+        PatientJsonReadWrite.Read(is);
+        try {
+            is.close();
+        } catch (Exception e) {
+
+        }
+
     }
 
 }

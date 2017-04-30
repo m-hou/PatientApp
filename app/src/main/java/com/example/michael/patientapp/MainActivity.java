@@ -8,26 +8,33 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.michael.patientapp.Model.Patient;
+import com.example.michael.patientapp.Util.PatientJsonReadWrite;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry",
-            "WebOS","Ubuntu","Windows7","Max OS X"};
+    ArrayList<Patient> patients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_listview, mobileArray);
+        InputStream is = getResources().openRawResource(R.raw.patients);
+        patients = PatientJsonReadWrite.Read(is);
 
+        ArrayAdapter adapter = new PatientAdapter(this, patients);
         ListView listView = (ListView) findViewById(R.id.mobile_list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
                 Intent intent = new Intent(MainActivity.this, PatientActivity.class);
-                intent.putExtra("title", mobileArray[position]);
+                intent.putExtra("id", patients.get(position).id);
+                intent.putExtra("name", patients.get(position).name);
                 startActivity(intent);
             }
         });
